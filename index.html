@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA ELITE // Premium Store</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'] },
+          colors: {
+            aura: { 50: '#f4f5ff', 500: '#6366f1', 600: '#4f46e5', dark: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Canvas Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); }
+    .dark .glass-nav { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); }
+
+    .drawer-transition { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Expandable Search Input Transition */
+    .search-input-collapsed {
+      width: 0px !important;
+      opacity: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+    
+    .search-input-expanded {
+      width: 180px !important;
+      opacity: 1 !important;
+      padding-left: 0.85rem !important;
+      padding-right: 0.85rem !important;
+    }
+    @media (min-width: 640px) {
+      .search-input-expanded { width: 240px !important; }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100" onclick="closeMenuDropdownOnClickOutside(event)">
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/60 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToTop()">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <span class="text-xl font-extrabold text-slate-900 dark:text-white">AURA<span class="text-indigo-600">.ELITE</span></span>
+        </div>
+
+        <!-- Right Side Controls -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          
+          <!-- EXPANDABLE SEARCH BAR -->
+          <div class="relative flex items-center" onclick="event.stopPropagation()">
+            <input 
+              type="text" 
+              id="search-input" 
+              oninput="handleSearch(event)"
+              placeholder="Search products..." 
+              class="search-input-collapsed transition-all duration-300 ease-in-out bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white py-2 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-slate-200 dark:border-slate-700 mr-1"
+            />
+            <button 
+              id="search-btn"
+              onclick="toggleSearchBar(event)" 
+              class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors shrink-0"
+              title="Search"
+            >
+              <i data-lucide="search" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Dark / Light Theme Toggle -->
+          <button 
+            onclick="toggleTheme()" 
+            class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors"
+            title="Toggle Theme"
+          >
+            <i id="theme-icon-sun" data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
+            <i id="theme-icon-moon" data-lucide="moon" class="w-5 h-5 block dark:hidden text-slate-700"></i>
+          </button>
+
+          <!-- AI Assistant Toggle Button -->
+          <button onclick="toggleAiDrawer()" class="hidden md:flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 px-3.5 py-2 rounded-full text-xs font-bold hover:bg-indigo-100 transition-all">
+            <i data-lucide="bot" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
+            <span>AI Assistant</span>
+          </button>
+
+          <!-- Wishlist Button -->
+          <button onclick="toggleWishlistModal()" class="relative p-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 rounded-full">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            <span id="wishlist-badge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+          </button>
+
+          <!-- Cart Drawer Trigger Button -->
+          <button onclick="toggleCartDrawer()" class="relative bg-slate-900 dark:bg-indigo-600 text-white p-2.5 rounded-full flex items-center justify-center shadow-md">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-indigo-600 dark:bg-pink-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
+          </button>
+
+          <!-- Menu Dropdown -->
+          <div class="relative">
+            <button id="menu-btn" onclick="toggleAccountMenu(event)" class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+
+            <div id="account-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-2 z-50 text-xs">
+              <button onclick="handleMenuAction('My account')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
+                <i data-lucide="user-plus" class="w-4 h-4 text-slate-500"></i>
+                <span>My account or open an account</span>
+              </button>
+              <button onclick="handleMenuAction('Offline outlets')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
+                <i data-lucide="store" class="w-4 h-4 text-slate-500"></i>
+                <span>Offline outlets (locations & details)</span>
+              </button>
+              <button onclick="handleMenuAction('Setting')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
+                <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+                <span>Setting</span>
+              </button>
+              <hr class="my-1 border-slate-100 dark:border-slate-800">
+              <button onclick="handleMenuAction('Logout')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 font-semibold transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER SECTION -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 lg:p-16 shadow-2xl border border-slate-800">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(99,102,241,0.15),transparent)]"></div>
+      <div class="relative z-10 max-w-2xl space-y-4">
+        <span class="inline-flex items-center gap-2 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i> Limited Time Offer
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+          Next-Gen Tech <br><span class="text-indigo-400">Crafted For Excellence.</span>
+        </h1>
+        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+          Explore our premium catalog of audio equipment, smart wearables, and ergonomic gear. Order directly or let our AI assist your purchase.
+        </p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href="#product-catalog" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
+            <span>Explore Products</span>
+            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+          </a>
+          <button onclick="toggleAiDrawer()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-5 py-3 rounded-xl backdrop-blur-md border border-white/10 transition-all flex items-center gap-2">
+            <i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i>
+            <span>Talk to AI Assistant</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY BAR SECTION (NEW) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <div id="category-bar" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
+      <!-- Generated dynamically by renderCategoryBar() -->
+    </div>
+  </section>
+
+  <!-- Product Catalog Section (Fixed 2-Column Mobile Grid) -->
+  <section id="product-catalog" class="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Featured Catalog</h2>
+      <span id="search-result-count" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hidden"></span>
+    </div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"></div>
+  </section>
+
+  <!-- PRODUCT DETAILS MODAL -->
+  <div id="product-details-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative border border-slate-100 dark:border-slate-800">
+      <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 z-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 p-2 rounded-full text-slate-600 dark:text-slate-300 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      
+      <div class="w-full md:w-1/2 bg-slate-100 dark:bg-slate-800 h-64 md:h-auto relative">
+        <img id="detail-modal-image" src="" alt="Product Image" class="w-full h-full object-cover">
+      </div>
+
+      <div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+        <div>
+          <span id="detail-modal-category" class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2.5 py-1 rounded-full">Category</span>
+          <h3 id="detail-modal-name" class="text-xl font-extrabold text-slate-900 dark:text-white mt-3 mb-2">Product Name</h3>
+          <p id="detail-modal-price" class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mb-4">$0.00</p>
+          <hr class="border-slate-100 dark:border-slate-800 my-3">
+          <p id="detail-modal-desc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">Detailed description will appear here.</p>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700">
+            <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">Quantity:</span>
+            <div class="flex items-center gap-3">
+              <button onclick="adjustModalQty(-1)" class="w-7 h-7 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex items-center justify-center font-bold text-sm text-slate-700 dark:text-white hover:bg-slate-200">-</button>
+              <span id="modal-qty-counter" class="text-xs font-bold w-4 text-center">1</span>
+              <button onclick="adjustModalQty(1)" class="w-7 h-7 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex items-center justify-center font-bold text-sm text-slate-700 dark:text-white hover:bg-slate-200">+</button>
+            </div>
+          </div>
+
+          <button id="detail-modal-add-btn" class="w-full bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors shadow-md">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Bag
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wishlist Modal -->
+  <div id="wishlist-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-slate-100 dark:border-slate-800">
+      <div class="p-4 border-b dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm">
+          <i data-lucide="heart" class="w-5 h-5 fill-pink-500"></i> Your Wishlist
+        </div>
+        <button onclick="toggleWishlistModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+      </div>
+      <div id="wishlist-items-container" class="p-4 overflow-y-auto space-y-3 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- AI Assistant Drawer -->
+  <div id="ai-drawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[400px] bg-white dark:bg-slate-900 shadow-2xl drawer-transition translate-x-full border-l border-slate-200 dark:border-slate-800 flex flex-col text-slate-900 dark:text-white">
+    <div class="p-4 border-b dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+      <div class="flex items-center gap-2.5">
+        <div id="agent-icon-bg" class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+          <i id="agent-icon" data-lucide="bot" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 id="agent-title" class="text-xs font-bold text-slate-900 dark:text-white">AURA AI Assistant</h3>
+          <span id="agent-status" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online & Ready
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1">
+        <button onclick="requestHumanHandover()" class="text-[11px] bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
+          <i data-lucide="headphones" class="w-3.5 h-3.5"></i> Human
+        </button>
+        <button onclick="toggleAiDrawer()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="ai-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+      <div class="bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100 dark:border-indigo-900 text-indigo-900 dark:text-indigo-200 p-3 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed">
+        👋 Hello! I am your AI Assistant. Ask me about products, or let me help you place an order right now!
+      </div>
+    </div>
+
+    <div class="px-3 py-2 border-t dark:border-slate-800 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50 dark:bg-slate-800/30">
+      <button onclick="askAiPrompt('Recommend top wireless headphones')" class="text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🎧 Headphones</button>
+      <button onclick="askAiPrompt('I want to place an order directly')" class="text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🛍️ Order via AI</button>
+      <button onclick="requestHumanHandover()" class="text-[11px] whitespace-nowrap bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-full border border-amber-200 dark:border-amber-800 font-bold">👤 Human Support</button>
+    </div>
+
+    <div class="p-3 border-t dark:border-slate-800 bg-white dark:bg-slate-900">
+      <form id="ai-form" onsubmit="handleAiSubmit(event)" class="flex gap-2">
+        <input type="text" id="ai-input" placeholder="Ask AI or place an order..." class="flex-1 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[380px] bg-white dark:bg-slate-900 shadow-2xl drawer-transition translate-x-full border-l border-slate-200 dark:border-slate-800 flex flex-col text-slate-900 dark:text-white">
+    <div class="p-4 border-b dark:border-slate-800 flex items-center justify-between">
+      <h3 class="text-sm font-bold text-slate-900 dark:text-white">Your Shopping Bag</h3>
+      <button onclick="toggleCartDrawer()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+    </div>
+    
+    <div id="cart-items" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
+    
+    <div class="p-4 border-t dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 space-y-3">
+      <div class="flex justify-between font-bold text-sm">
+        <span>Total Amount:</span>
+        <span id="cart-total" class="text-indigo-600 dark:text-indigo-400">$0.00</span>
+      </div>
+      <button onclick="completeOrder()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors text-xs shadow-md">
+        Proceed to Checkout
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const productsData = [
+      { id: 'p1', name: 'Aura Studio Pro Wireless', category: 'Audio', price: 299.00, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', desc: 'Active noise cancelling premium headphones with up to 40 hours of continuous high-fidelity spatial audio playback.' },
+      { id: 'p2', name: 'Aura Watch Ultra Titanium', category: 'Wearables', price: 449.00, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80', desc: 'Titanium chassis smart biometric watch featuring real-time heart health telemetry and precise dual-frequency GPS.' },
+      { id: 'p3', name: 'Aura Pods ANC Pro', category: 'Audio', price: 179.00, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&q=80', desc: 'Compact wireless earbuds with deep sub-bass response, active transparency mode, and wireless charging case.' },
+      { id: 'p4', name: 'Aura Kinetic Pulse V1', category: 'Footwear', price: 220.00, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80', desc: 'Dynamic cushioning smart sneakers engineered for maximum energy return and ergonomic arch support.' }
+    ];
+
+    let cart = [];
+    let wishlist = [];
+    let modalSelectedQty = 1;
+    let activeModalProductId = null;
+    let aiOrderStep = 'idle';
+    let selectedProductForAi = null;
+    let isHumanAgentMode = false;
+    let activeSearchQuery = '';
+    let selectedCategory = 'All';
+
+    /* ---------------- THEME TOGGLE ---------------- */
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    /* ---------------- SEARCH BAR TOGGLE ---------------- */
+    function toggleSearchBar(e) {
+      if (e) e.stopPropagation();
+      const input = document.getElementById('search-input');
+      const isCollapsed = input.classList.contains('search-input-collapsed');
+
+      if (isCollapsed) {
+        input.classList.remove('search-input-collapsed');
+        input.classList.add('search-input-expanded');
+        input.focus();
+      } else {
+        if (input.value.trim() === '') {
+          input.classList.remove('search-input-expanded');
+          input.classList.add('search-input-collapsed');
+        } else {
+          input.value = '';
+          handleSearch({ target: input });
+          input.classList.remove('search-input-expanded');
+          input.classList.add('search-input-collapsed');
+        }
+      }
+    }
+
+    function handleSearch(e) {
+      activeSearchQuery = e.target.value.toLowerCase().trim();
+      renderProducts();
+    }
+
+    /* ---------------- CATEGORY BAR RENDERER ---------------- */
+    function renderCategoryBar() {
+      const bar = document.getElementById('category-bar');
+      const categories = ['All', ...new Set(productsData.map(p => p.category))];
+
+      const icons = {
+        'All': 'layers',
+        'Audio': 'headphones',
+        'Wearables': 'watch',
+        'Footwear': 'footprints'
+      };
+
+      bar.innerHTML = categories.map(cat => {
+        const isActive = cat === selectedCategory;
+        const iconName = icons[cat] || 'tag';
+        return `
+          <button 
+            onclick="selectCategory('${cat}')" 
+            class="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+              isActive 
+                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' 
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-300'
+            }"
+          >
+            <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i>
+            <span>${cat}</span>
+          </button>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      renderCategoryBar();
+      renderProducts();
+    }
+
+    /* ---------------- PRODUCT DETAILS MODAL ---------------- */
+    function openProductDetails(id) {
+      const product = productsData.find(p => p.id === id);
+      if (!product) return;
+
+      activeModalProductId = id;
+      modalSelectedQty = 1;
+      document.getElementById('modal-qty-counter').textContent = modalSelectedQty;
+
+      document.getElementById('detail-modal-name').textContent = product.name;
+      document.getElementById('detail-modal-category').textContent = product.category;
+      document.getElementById('detail-modal-price').textContent = `$${product.price.toFixed(2)}`;
+      document.getElementById('detail-modal-desc').textContent = product.desc;
+      document.getElementById('detail-modal-image').src = product.image;
+
+      const addBtn = document.getElementById('detail-modal-add-btn');
+      addBtn.onclick = function() {
+        addToCartById(activeModalProductId, modalSelectedQty);
+        closeProductDetailsModal();
+        toggleCartDrawer();
+      };
+
+      document.getElementById('product-details-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function adjustModalQty(delta) {
+      modalSelectedQty += delta;
+      if (modalSelectedQty < 1) modalSelectedQty = 1;
+      document.getElementById('modal-qty-counter').textContent = modalSelectedQty;
+    }
+
+    function closeProductDetailsModal() {
+      document.getElementById('product-details-modal').classList.add('hidden');
+    }
+
+    /* ---------------- MENU DROPDOWN ---------------- */
+    function toggleAccountMenu(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('account-dropdown').classList.toggle('hidden');
+    }
+
+    function closeMenuDropdownOnClickOutside(e) {
+      const dropdown = document.getElementById('account-dropdown');
+      const menuBtn = document.getElementById('menu-btn');
+      if (dropdown && !dropdown.classList.contains('hidden')) {
+        if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+          dropdown.classList.add('hidden');
+        }
+      }
+
+      const searchInput = document.getElementById('search-input');
+      if (searchInput && searchInput.classList.contains('search-input-expanded') && searchInput.value.trim() === '') {
+        searchInput.classList.remove('search-input-expanded');
+        searchInput.classList.add('search-input-collapsed');
+      }
+    }
+
+    function handleMenuAction(actionName) {
+      document.getElementById('account-dropdown').classList.add('hidden');
+      alert(`Clicked: ${actionName}`);
+    }
+
+    /* ---------------- WISHLIST SYSTEM ---------------- */
+    function toggleWishlist(id, e) {
+      if (e) e.stopPropagation();
+      const idx = wishlist.indexOf(id);
+      if (idx === -1) wishlist.push(id);
+      else wishlist.splice(idx, 1);
+      updateWishlistUI();
+      renderProducts();
+    }
+
+    function updateWishlistUI() {
+      document.getElementById('wishlist-badge').textContent = wishlist.length;
+      const container = document.getElementById('wishlist-items-container');
+      
+      if (wishlist.length === 0) {
+        container.innerHTML = `<p class="text-center py-8 text-slate-400 text-xs">Your wishlist is empty.</p>`;
+        return;
+      }
+
+      const items = productsData.filter(p => wishlist.includes(p.id));
+      container.innerHTML = items.map(p => `
+        <div class="flex items-center justify-between border-b dark:border-slate-800 pb-2">
+          <div class="flex items-center gap-2 cursor-pointer" onclick="openProductDetails('${p.id}')">
+            <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
+            <div>
+              <h4 class="font-bold text-xs">${p.name}</h4>
+              <p class="text-xs text-indigo-600 dark:text-indigo-400">$${p.price.toFixed(2)}</p>
+            </div>
+          </div>
+          <button onclick="addToCartById('${p.id}', 1)" class="bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-lg hover:bg-indigo-700 transition-colors">Add to Cart</button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function toggleWishlistModal() {
+      document.getElementById('wishlist-modal').classList.toggle('hidden');
+    }
+
+    /* ---------------- CATALOG RENDERER (Updated with Category Filtering) ---------------- */
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const countLabel = document.getElementById('search-result-count');
+
+      const filtered = productsData.filter(p => {
+        const matchesCategory = selectedCategory === 'All' || p.category.toLowerCase() === selectedCategory.toLowerCase();
+        const matchesSearch = p.name.toLowerCase().includes(activeSearchQuery) || 
+                              p.category.toLowerCase().includes(activeSearchQuery) ||
+                              p.desc.toLowerCase().includes(activeSearchQuery);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (activeSearchQuery !== '') {
+        countLabel.textContent = `Showing ${filtered.length} result(s) for "${activeSearchQuery}"`;
+        countLabel.classList.remove('hidden');
+      } else {
+        countLabel.classList.add('hidden');
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No products found for this category or search query.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(product => {
+        const isWishlisted = wishlist.includes(product.id);
+        const cartItem = cart.find(i => i.id === product.id);
+        const cartQty = cartItem ? cartItem.qty : 0;
+
+        return `
+          <div onclick="openProductDetails('${product.id}')" class="bg-white dark:bg-slate-900 rounded-2xl p-2.5 sm:p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer group">
+            <div class="relative w-full h-28 sm:h-44 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 mb-2 sm:mb-3">
+              <button onclick="toggleWishlist('${product.id}', event)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/80 dark:bg-slate-800/80 p-1.5 sm:p-2 rounded-full z-10 hover:scale-110 transition-transform">
+                <i data-lucide="heart" class="w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-pink-500 text-pink-500' : 'text-slate-600 dark:text-slate-300'}"></i>
+              </button>
+              <img src="${product.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-slate-900/70 text-white text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full backdrop-blur-sm">Details</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1 sm:line-clamp-none">${product.name}</h3>
+              <p class="text-slate-500 dark:text-slate-400 text-[11px] my-1 line-clamp-2 hidden sm:block">${product.desc}</p>
+            </div>
+            
+            <div class="flex items-center justify-between pt-2 border-t dark:border-slate-800 mt-2" onclick="event.stopPropagation()">
+              <span class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white">$${product.price.toFixed(2)}</span>
+              
+              ${cartQty > 0 ? `
+                <div class="flex items-center gap-1 sm:gap-1.5 bg-indigo-50 dark:bg-indigo-950/60 p-0.5 sm:p-1 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                  <button onclick="removeFromCartSpecific('${product.id}')" class="w-5 h-5 sm:w-6 sm:h-6 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
+                  <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 px-0.5 sm:px-1">${cartQty}</span>
+                  <button onclick="addToCartById('${product.id}', 1)" class="w-5 h-5 sm:w-6 sm:h-6 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm hover:bg-indigo-700">+</button>
+                </div>
+              ` : `
+                <button onclick="addToCartById('${product.id}', 1)" class="bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition-colors flex items-center gap-0.5 sm:gap-1">
+                  <i data-lucide="plus" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Add
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    /* ---------------- CART CONTROLS ---------------- */
+    function addToCartById(id, qtyToAdd = 1) {
+      const item = productsData.find(p => p.id === id);
+      if (item) {
+        const existing = cart.find(i => i.id === id);
+        if (existing) {
+          existing.qty += qtyToAdd;
+        } else {
+          cart.push({ ...item, qty: qtyToAdd });
+        }
+        updateCartUI();
+        renderProducts();
+      }
+    }
+
+    function removeFromCartSpecific(id) {
+      const itemIndex = cart.findIndex(i => i.id === id);
+      if (itemIndex !== -1) {
+        if (cart[itemIndex].qty > 1) {
+          cart[itemIndex].qty--;
+        } else {
+          cart.splice(itemIndex, 1);
+        }
+        updateCartUI();
+        renderProducts();
+      }
+    }
+
+    function removeEntireItemFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      updateCartUI();
+      renderProducts();
+    }
+
+    function updateCartUI() {
+      const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cart-badge').textContent = totalQty;
+      
+      const container = document.getElementById('cart-items');
+      if (cart.length === 0) {
+        container.innerHTML = `<p class="text-center py-8 text-slate-400 text-xs">Your bag is empty.</p>`;
+      } else {
+        container.innerHTML = cart.map(i => `
+          <div class="flex items-center justify-between border-b dark:border-slate-800 pb-3">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="openProductDetails('${i.id}')">
+              <img src="${i.image}" class="w-12 h-12 rounded-xl object-cover">
+              <div>
+                <h4 class="font-bold text-xs leading-tight">${i.name}</h4>
+                <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mt-0.5">$${(i.price * i.qty).toFixed(2)}</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                <button onclick="removeFromCartSpecific('${i.id}')" class="w-5 h-5 bg-white dark:bg-slate-700 rounded flex items-center justify-center text-xs font-bold text-slate-700 dark:text-white">-</button>
+                <span class="text-xs font-bold px-1">${i.qty}</span>
+                <button onclick="addToCartById('${i.id}', 1)" class="w-5 h-5 bg-white dark:bg-slate-700 rounded flex items-center justify-center text-xs font-bold text-slate-700 dark:text-white">+</button>
+              </div>
+
+              <button onclick="removeEntireItemFromCart('${i.id}')" class="p-1.5 text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="Remove Item">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+      lucide.createIcons();
+    }
+
+    function toggleCartDrawer() {
+      document.getElementById('cart-drawer').classList.toggle('translate-x-full');
+    }
+
+    function completeOrder() {
+      if (cart.length === 0 && !selectedProductForAi) return;
+      if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      cart = [];
+      updateCartUI();
+      renderProducts();
+      alert('🎉 Order Placed Successfully!');
+    }
+
+    /* ---------------- AI ASSISTANT ---------------- */
+    function toggleAiDrawer() {
+      document.getElementById('ai-drawer').classList.toggle('translate-x-full');
+    }
+
+    function askAiPrompt(text) {
+      document.getElementById('ai-input').value = text;
+      handleAiSubmit(new Event('submit'));
+    }
+
+    function requestHumanHandover() {
+      isHumanAgentMode = true;
+      aiOrderStep = 'idle';
+
+      document.getElementById('agent-title').textContent = "Human Support Agent (Sarah)";
+      document.getElementById('agent-status').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Human Agent Active`;
+      document.getElementById('agent-icon-bg').className = "w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-white";
+
+      appendAiMessage("👋 Hello! I am Sarah from human support. I have taken over this session. How can I personally help you today?");
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('ai-messages');
+      container.innerHTML += `
+        <div class="bg-slate-900 dark:bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%] leading-relaxed">
+          ${text}
+        </div>
+      `;
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendAiMessage(text, actionButtons = '') {
+      const container = document.getElementById('ai-messages');
+      const bgStyle = isHumanAgentMode 
+        ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-200' 
+        : 'bg-indigo-50 dark:bg-indigo-950/50 border-indigo-100 dark:border-indigo-900 text-indigo-900 dark:text-indigo-200';
+      
+      container.innerHTML += `
+        <div class="${bgStyle} border p-3 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed space-y-2">
+          <div>${text}</div>
+          ${actionButtons}
+        </div>
+      `;
+      container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function handleAiSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('ai-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      appendUserMessage(val);
+      input.value = '';
+
+      const lower = val.toLowerCase();
+
+      if (lower.includes('human') || lower.includes('agent') || lower.includes('person')) {
+        setTimeout(requestHumanHandover, 400);
+        return;
+      }
+
+      if (isHumanAgentMode) {
+        setTimeout(() => {
+          appendAiMessage("I received your message. Let me review your request right away!");
+        }, 600);
+        return;
+      }
+
+      setTimeout(() => {
+        if (aiOrderStep === 'asking_address') {
+          aiOrderStep = 'asking_payment';
+          appendAiMessage(`Address updated to: <strong>${val}</strong>.<br><br>Which payment method do you prefer? (e.g., <strong>Credit Card</strong> or <strong>Cash on Delivery</strong>)`);
+          return;
+        }
+
+        if (aiOrderStep === 'asking_payment') {
+          aiOrderStep = 'idle';
+          completeOrder();
+          appendAiMessage(`🎉 <strong>Order Confirmed!</strong><br>Your order for <strong>${selectedProductForAi.name}</strong> paid via <strong>${val}</strong> has been processed.`);
+          selectedProductForAi = null;
+          return;
+        }
+
+        if (lower.includes('order') || lower.includes('buy')) {
+          selectedProductForAi = productsData.find(p => lower.includes(p.name.toLowerCase())) || productsData[0];
+          addToCartById(selectedProductForAi.id, 1);
+          aiOrderStep = 'asking_address';
+          appendAiMessage(`I'll help you order <strong>${selectedProductForAi.name}</strong> ($${selectedProductForAi.price.toFixed(2)}).<br><br>Please type your <strong>Shipping Address</strong>:`);
+          return;
+        }
+
+        if (lower.includes('headphone') || lower.includes('audio')) {
+          const item = productsData[0];
+          appendAiMessage(
+            `Our top recommendation is the <strong>${item.name}</strong> ($${item.price.toFixed(2)}).`,
+            `<button onclick="addToCartById('${item.id}', 1)" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 hover:bg-indigo-700 transition-colors"><i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add to Bag</button>`
+          );
+          return;
+        }
+
+        appendAiMessage("How can I assist you today? You can ask for product recommendations, or type <strong>'Order'</strong> to start an order right away!");
+      }, 500);
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.onload = function() {
+      renderCategoryBar();
+      renderProducts();
+      updateCartUI();
+      updateWishlistUI();
+    };
+  </script>
+</body>
+</html>
