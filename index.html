@@ -2,8 +2,8 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA ELITE // Premium Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AURA ELITE // Premium Mobile Store</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,16 +31,16 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
     
-    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); }
-    .dark .glass-nav { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); }
+    .glass-nav { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .dark .glass-nav { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 
     .drawer-transition { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Expandable Search Input Transition */
+    /* Expandable Search Input Transition for Mobile & Desktop */
     .search-input-collapsed {
       width: 0px !important;
       opacity: 0 !important;
@@ -49,99 +49,99 @@
     }
     
     .search-input-expanded {
-      width: 180px !important;
+      width: 140px !important;
       opacity: 1 !important;
-      padding-left: 0.85rem !important;
-      padding-right: 0.85rem !important;
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
     }
     @media (min-width: 640px) {
-      .search-input-expanded { width: 240px !important; }
+      .search-input-expanded { width: 220px !important; }
     }
   </style>
 </head>
 <body class="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100" onclick="closeMenuDropdownOnClickOutside(event)">
 
-  <!-- Navigation Bar -->
+  <!-- Navigation Bar (Optimized for Mobile Header Area) -->
   <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/60 dark:border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
         
         <!-- Brand Logo -->
-        <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToTop()">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg">
-            <i data-lucide="sparkles" class="w-5 h-5"></i>
+        <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="scrollToTop()">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+            <i data-lucide="sparkles" class="w-4 h-4 sm:w-5 sm:h-5"></i>
           </div>
-          <span class="text-xl font-extrabold text-slate-900 dark:text-white">AURA<span class="text-indigo-600">.ELITE</span></span>
+          <span class="text-base sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">AURA<span class="text-indigo-600">.ELITE</span></span>
         </div>
 
         <!-- Right Side Controls -->
-        <div class="flex items-center space-x-2 sm:space-x-3">
+        <div class="flex items-center space-x-1.5 sm:space-x-3">
           
-          <!-- EXPANDABLE SEARCH BAR -->
+          <!-- Expandable Search Bar -->
           <div class="relative flex items-center" onclick="event.stopPropagation()">
             <input 
               type="text" 
               id="search-input" 
               oninput="handleSearch(event)"
-              placeholder="Search products..." 
-              class="search-input-collapsed transition-all duration-300 ease-in-out bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white py-2 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-slate-200 dark:border-slate-700 mr-1"
+              placeholder="Search..." 
+              class="search-input-collapsed transition-all duration-300 ease-in-out bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white py-1.5 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-slate-200 dark:border-slate-700 mr-0.5"
             />
             <button 
               id="search-btn"
               onclick="toggleSearchBar(event)" 
-              class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors shrink-0"
+              class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors shrink-0"
               title="Search"
             >
-              <i data-lucide="search" class="w-5 h-5"></i>
+              <i data-lucide="search" class="w-4 h-4 sm:w-5 sm:h-5"></i>
             </button>
           </div>
 
           <!-- Dark / Light Theme Toggle -->
           <button 
             onclick="toggleTheme()" 
-            class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors"
+            class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors shrink-0"
             title="Toggle Theme"
           >
-            <i id="theme-icon-sun" data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
-            <i id="theme-icon-moon" data-lucide="moon" class="w-5 h-5 block dark:hidden text-slate-700"></i>
+            <i id="theme-icon-sun" data-lucide="sun" class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block text-amber-400"></i>
+            <i id="theme-icon-moon" data-lucide="moon" class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden text-slate-700"></i>
           </button>
 
-          <!-- AI Assistant Toggle Button -->
+          <!-- AI Assistant Toggle Button (Desktop/Tablet) -->
           <button onclick="toggleAiDrawer()" class="hidden md:flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 px-3.5 py-2 rounded-full text-xs font-bold hover:bg-indigo-100 transition-all">
             <i data-lucide="bot" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
             <span>AI Assistant</span>
           </button>
 
           <!-- Wishlist Button -->
-          <button onclick="toggleWishlistModal()" class="relative p-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 rounded-full">
-            <i data-lucide="heart" class="w-5 h-5"></i>
-            <span id="wishlist-badge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+          <button onclick="toggleWishlistModal()" class="relative p-1.5 sm:p-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 rounded-full shrink-0">
+            <i data-lucide="heart" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span id="wishlist-badge" class="absolute top-0 right-0 sm:-top-1 sm:-right-1 bg-pink-500 text-white text-[9px] sm:text-[10px] font-bold w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center">0</span>
           </button>
 
           <!-- Cart Drawer Trigger Button -->
-          <button onclick="toggleCartDrawer()" class="relative bg-slate-900 dark:bg-indigo-600 text-white p-2.5 rounded-full flex items-center justify-center shadow-md">
-            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-            <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-indigo-600 dark:bg-pink-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
+          <button onclick="toggleCartDrawer()" class="relative bg-slate-900 dark:bg-indigo-600 text-white p-2 sm:p-2.5 rounded-full flex items-center justify-center shadow-md shrink-0">
+            <i data-lucide="shopping-bag" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 bg-indigo-600 dark:bg-pink-500 text-white text-[10px] sm:text-[11px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
           </button>
 
-          <!-- Menu Dropdown -->
-          <div class="relative">
-            <button id="menu-btn" onclick="toggleAccountMenu(event)" class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors">
-              <i data-lucide="menu" class="w-5 h-5"></i>
+          <!-- Menu Dropdown Trigger -->
+          <div class="relative shrink-0">
+            <button id="menu-btn" onclick="toggleAccountMenu(event)" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-full flex items-center justify-center transition-colors">
+              <i data-lucide="menu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
             </button>
 
-            <div id="account-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-2 z-50 text-xs">
+            <div id="account-dropdown" class="hidden absolute right-0 mt-2 w-56 sm:w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-2 z-50 text-xs">
               <button onclick="handleMenuAction('My account')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
                 <i data-lucide="user-plus" class="w-4 h-4 text-slate-500"></i>
-                <span>My account or open an account</span>
+                <span>My Account</span>
               </button>
               <button onclick="handleMenuAction('Offline outlets')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
                 <i data-lucide="store" class="w-4 h-4 text-slate-500"></i>
-                <span>Offline outlets (locations & details)</span>
+                <span>Outlets & Locations</span>
               </button>
               <button onclick="handleMenuAction('Setting')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-indigo-600 font-semibold transition-colors">
                 <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
-                <span>Setting</span>
+                <span>Settings</span>
               </button>
               <hr class="my-1 border-slate-100 dark:border-slate-800">
               <button onclick="handleMenuAction('Logout')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 font-semibold transition-colors">
@@ -156,71 +156,71 @@
     </div>
   </header>
 
-  <!-- HERO BANNER SECTION -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 lg:p-16 shadow-2xl border border-slate-800">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(99,102,241,0.15),transparent)]"></div>
-      <div class="relative z-10 max-w-2xl space-y-4">
-        <span class="inline-flex items-center gap-2 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-          <i data-lucide="zap" class="w-3.5 h-3.5"></i> Limited Time Offer
+  <!-- HERO BANNER SECTION (Mobile Responsive Layout) -->
+  <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-12 lg:p-16 shadow-xl border border-slate-800">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(99,102,241,0.2),transparent)]"></div>
+      <div class="relative z-10 max-w-2xl space-y-3 sm:space-y-4">
+        <span class="inline-flex items-center gap-1.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-wider">
+          <i data-lucide="zap" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Limited Time Offer
         </span>
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+        <h1 class="text-2xl sm:text-5xl font-extrabold tracking-tight leading-snug sm:leading-tight">
           Next-Gen Tech <br><span class="text-indigo-400">Crafted For Excellence.</span>
         </h1>
-        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg hidden sm:block">
           Explore our premium catalog of audio equipment, smart wearables, and ergonomic gear. Order directly or let our AI assist your purchase.
         </p>
-        <div class="flex flex-wrap gap-3 pt-2">
-          <a href="#product-catalog" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
+        <div class="flex flex-wrap gap-2.5 pt-1">
+          <a href="#product-catalog" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl transition-all shadow-lg flex items-center gap-1.5">
             <span>Explore Products</span>
-            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+            <i data-lucide="arrow-down" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </a>
-          <button onclick="toggleAiDrawer()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-5 py-3 rounded-xl backdrop-blur-md border border-white/10 transition-all flex items-center gap-2">
-            <i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i>
-            <span>Talk to AI Assistant</span>
+          <button onclick="toggleAiDrawer()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl backdrop-blur-md border border-white/10 transition-all flex items-center gap-1.5">
+            <i data-lucide="bot" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-400"></i>
+            <span>Ask AI</span>
           </button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CATEGORY BAR SECTION (NEW) -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-    <div id="category-bar" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
-      <!-- Generated dynamically by renderCategoryBar() -->
+  <!-- CATEGORY BAR SECTION (Mobile Horizontal Touch Scroll) -->
+  <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <div id="category-bar" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+      <!-- Rendered dynamically -->
     </div>
   </section>
 
-  <!-- Product Catalog Section (Fixed 2-Column Mobile Grid) -->
-  <section id="product-catalog" class="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Featured Catalog</h2>
-      <span id="search-result-count" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hidden"></span>
+  <!-- Product Catalog Section (Touch-Friendly 2-Column Mobile Grid) -->
+  <section id="product-catalog" class="py-4 sm:py-8 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-4 sm:mb-6">
+      <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Featured Catalog</h2>
+      <span id="search-result-count" class="text-[11px] sm:text-xs font-semibold text-indigo-600 dark:text-indigo-400 hidden"></span>
     </div>
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"></div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"></div>
   </section>
 
-  <!-- PRODUCT DETAILS MODAL -->
-  <div id="product-details-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative border border-slate-100 dark:border-slate-800">
-      <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 z-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 p-2 rounded-full text-slate-600 dark:text-slate-300 transition-colors">
-        <i data-lucide="x" class="w-5 h-5"></i>
+  <!-- PRODUCT DETAILS MODAL (Responsive Mobile Bottom Sheet / Card) -->
+  <div id="product-details-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative border border-slate-100 dark:border-slate-800 max-h-[90vh] sm:max-h-none">
+      <button onclick="closeProductDetailsModal()" class="absolute top-3 right-3 z-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 p-2 rounded-full text-slate-600 dark:text-slate-300 transition-colors">
+        <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
       </button>
       
-      <div class="w-full md:w-1/2 bg-slate-100 dark:bg-slate-800 h-64 md:h-auto relative">
+      <div class="w-full md:w-1/2 bg-slate-100 dark:bg-slate-800 h-48 sm:h-64 md:h-auto relative shrink-0">
         <img id="detail-modal-image" src="" alt="Product Image" class="w-full h-full object-cover">
       </div>
 
-      <div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+      <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto">
         <div>
-          <span id="detail-modal-category" class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2.5 py-1 rounded-full">Category</span>
-          <h3 id="detail-modal-name" class="text-xl font-extrabold text-slate-900 dark:text-white mt-3 mb-2">Product Name</h3>
-          <p id="detail-modal-price" class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mb-4">$0.00</p>
-          <hr class="border-slate-100 dark:border-slate-800 my-3">
-          <p id="detail-modal-desc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">Detailed description will appear here.</p>
+          <span id="detail-modal-category" class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full">Category</span>
+          <h3 id="detail-modal-name" class="text-base sm:text-xl font-extrabold text-slate-900 dark:text-white mt-2 sm:mt-3 mb-1 sm:mb-2">Product Name</h3>
+          <p id="detail-modal-price" class="text-lg sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mb-2 sm:mb-4">$0.00</p>
+          <hr class="border-slate-100 dark:border-slate-800 my-2 sm:my-3">
+          <p id="detail-modal-desc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3 sm:mb-4">Detailed description will appear here.</p>
         </div>
 
-        <div class="space-y-3 pt-2">
+        <div class="space-y-2.5 sm:space-y-3 pt-2">
           <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700">
             <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">Quantity:</span>
             <div class="flex items-center gap-3">
@@ -230,7 +230,7 @@
             </div>
           </div>
 
-          <button id="detail-modal-add-btn" class="w-full bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors shadow-md">
+          <button id="detail-modal-add-btn" class="w-full bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold py-2.5 sm:py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors shadow-md">
             <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Bag
           </button>
         </div>
@@ -239,35 +239,35 @@
   </div>
 
   <!-- Wishlist Modal -->
-  <div id="wishlist-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-slate-100 dark:border-slate-800">
-      <div class="p-4 border-b dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
-        <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm">
-          <i data-lucide="heart" class="w-5 h-5 fill-pink-500"></i> Your Wishlist
+  <div id="wishlist-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white w-full max-w-md rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-slate-100 dark:border-slate-800">
+      <div class="p-3 sm:p-4 border-b dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-xs sm:text-sm">
+          <i data-lucide="heart" class="w-4 h-4 sm:w-5 sm:h-5 fill-pink-500"></i> Your Wishlist
         </div>
-        <button onclick="toggleWishlistModal()"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+        <button onclick="toggleWishlistModal()"><i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400"></i></button>
       </div>
-      <div id="wishlist-items-container" class="p-4 overflow-y-auto space-y-3 flex-1"></div>
+      <div id="wishlist-items-container" class="p-3 sm:p-4 overflow-y-auto space-y-3 flex-1"></div>
     </div>
   </div>
 
   <!-- AI Assistant Drawer -->
   <div id="ai-drawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[400px] bg-white dark:bg-slate-900 shadow-2xl drawer-transition translate-x-full border-l border-slate-200 dark:border-slate-800 flex flex-col text-slate-900 dark:text-white">
-    <div class="p-4 border-b dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+    <div class="p-3.5 sm:p-4 border-b dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
       <div class="flex items-center gap-2.5">
-        <div id="agent-icon-bg" class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white">
-          <i id="agent-icon" data-lucide="bot" class="w-5 h-5"></i>
+        <div id="agent-icon-bg" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white shrink-0">
+          <i id="agent-icon" data-lucide="bot" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         </div>
         <div>
           <h3 id="agent-title" class="text-xs font-bold text-slate-900 dark:text-white">AURA AI Assistant</h3>
-          <span id="agent-status" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online & Ready
+          <span id="agent-status" class="text-[9px] sm:text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online
           </span>
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button onclick="requestHumanHandover()" class="text-[11px] bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
-          <i data-lucide="headphones" class="w-3.5 h-3.5"></i> Human
+        <button onclick="requestHumanHandover()" class="text-[10px] sm:text-[11px] bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+          <i data-lucide="headphones" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Human
         </button>
         <button onclick="toggleAiDrawer()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -275,22 +275,22 @@
       </div>
     </div>
 
-    <div id="ai-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+    <div id="ai-messages" class="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 text-xs">
       <div class="bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100 dark:border-indigo-900 text-indigo-900 dark:text-indigo-200 p-3 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed">
         👋 Hello! I am your AI Assistant. Ask me about products, or let me help you place an order right now!
       </div>
     </div>
 
     <div class="px-3 py-2 border-t dark:border-slate-800 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50 dark:bg-slate-800/30">
-      <button onclick="askAiPrompt('Recommend top wireless headphones')" class="text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🎧 Headphones</button>
-      <button onclick="askAiPrompt('I want to place an order directly')" class="text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🛍️ Order via AI</button>
-      <button onclick="requestHumanHandover()" class="text-[11px] whitespace-nowrap bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-full border border-amber-200 dark:border-amber-800 font-bold">👤 Human Support</button>
+      <button onclick="askAiPrompt('Recommend top wireless headphones')" class="text-[10px] sm:text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🎧 Headphones</button>
+      <button onclick="askAiPrompt('I want to place an order directly')" class="text-[10px] sm:text-[11px] whitespace-nowrap bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border dark:border-slate-700 shadow-sm">🛍️ Order via AI</button>
+      <button onclick="requestHumanHandover()" class="text-[10px] sm:text-[11px] whitespace-nowrap bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-amber-200 dark:border-amber-800 font-bold">👤 Human Support</button>
     </div>
 
     <div class="p-3 border-t dark:border-slate-800 bg-white dark:bg-slate-900">
       <form id="ai-form" onsubmit="handleAiSubmit(event)" class="flex gap-2">
-        <input type="text" id="ai-input" placeholder="Ask AI or place an order..." class="flex-1 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white">
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl">
+        <input type="text" id="ai-input" placeholder="Ask AI..." class="flex-1 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 sm:p-2.5 rounded-xl">
           <i data-lucide="send" class="w-4 h-4"></i>
         </button>
       </form>
@@ -386,9 +386,9 @@
         return `
           <button 
             onclick="selectCategory('${cat}')" 
-            class="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+            class="flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
               isActive 
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' 
+                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 scale-[1.02]' 
                 : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-300'
             }"
           >
@@ -508,7 +508,7 @@
       document.getElementById('wishlist-modal').classList.toggle('hidden');
     }
 
-    /* ---------------- CATALOG RENDERER (Updated with Category Filtering) ---------------- */
+    /* ---------------- CATALOG RENDERER (Optimized 2-Column Mobile Grid) ---------------- */
     function renderProducts() {
       const grid = document.getElementById('product-grid');
       const countLabel = document.getElementById('search-result-count');
@@ -522,14 +522,14 @@
       });
 
       if (activeSearchQuery !== '') {
-        countLabel.textContent = `Showing ${filtered.length} result(s) for "${activeSearchQuery}"`;
+        countLabel.textContent = `${filtered.length} result(s)`;
         countLabel.classList.remove('hidden');
       } else {
         countLabel.classList.add('hidden');
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No products found for this category or search query.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-xs sm:text-sm">No products found for this category or search query.</div>`;
         return;
       }
 
@@ -539,30 +539,30 @@
         const cartQty = cartItem ? cartItem.qty : 0;
 
         return `
-          <div onclick="openProductDetails('${product.id}')" class="bg-white dark:bg-slate-900 rounded-2xl p-2.5 sm:p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer group">
-            <div class="relative w-full h-28 sm:h-44 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 mb-2 sm:mb-3">
-              <button onclick="toggleWishlist('${product.id}', event)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/80 dark:bg-slate-800/80 p-1.5 sm:p-2 rounded-full z-10 hover:scale-110 transition-transform">
+          <div onclick="openProductDetails('${product.id}')" class="bg-white dark:bg-slate-900 rounded-2xl p-2 sm:p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer group">
+            <div class="relative w-full h-32 sm:h-44 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 mb-2 sm:mb-3">
+              <button onclick="toggleWishlist('${product.id}', event)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/85 dark:bg-slate-800/85 p-1.5 sm:p-2 rounded-full z-10 hover:scale-110 transition-transform shadow-sm">
                 <i data-lucide="heart" class="w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-pink-500 text-pink-500' : 'text-slate-600 dark:text-slate-300'}"></i>
               </button>
               <img src="${product.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-slate-900/70 text-white text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full backdrop-blur-sm">Details</span>
+              <span class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 bg-slate-900/75 text-white text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full backdrop-blur-sm">Details</span>
             </div>
             <div>
-              <h3 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1 sm:line-clamp-none">${product.name}</h3>
+              <h3 class="font-bold text-[11px] sm:text-xs text-slate-900 dark:text-white leading-snug line-clamp-1 sm:line-clamp-none">${product.name}</h3>
               <p class="text-slate-500 dark:text-slate-400 text-[11px] my-1 line-clamp-2 hidden sm:block">${product.desc}</p>
             </div>
             
-            <div class="flex items-center justify-between pt-2 border-t dark:border-slate-800 mt-2" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between pt-1.5 sm:pt-2 border-t dark:border-slate-800 mt-1.5 sm:mt-2" onclick="event.stopPropagation()">
               <span class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white">$${product.price.toFixed(2)}</span>
               
               ${cartQty > 0 ? `
-                <div class="flex items-center gap-1 sm:gap-1.5 bg-indigo-50 dark:bg-indigo-950/60 p-0.5 sm:p-1 rounded-xl border border-indigo-200 dark:border-indigo-800">
-                  <button onclick="removeFromCartSpecific('${product.id}')" class="w-5 h-5 sm:w-6 sm:h-6 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
-                  <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 px-0.5 sm:px-1">${cartQty}</span>
-                  <button onclick="addToCartById('${product.id}', 1)" class="w-5 h-5 sm:w-6 sm:h-6 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm hover:bg-indigo-700">+</button>
+                <div class="flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/60 p-0.5 sm:p-1 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                  <button onclick="removeFromCartSpecific('${product.id}')" class="w-5 h-5 sm:w-6 sm:h-6 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm active:scale-95">-</button>
+                  <span class="text-[11px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 px-0.5 sm:px-1">${cartQty}</span>
+                  <button onclick="addToCartById('${product.id}', 1)" class="w-5 h-5 sm:w-6 sm:h-6 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs shadow-sm active:scale-95">+</button>
                 </div>
               ` : `
-                <button onclick="addToCartById('${product.id}', 1)" class="bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition-colors flex items-center gap-0.5 sm:gap-1">
+                <button onclick="addToCartById('${product.id}', 1)" class="bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-700 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition-colors flex items-center gap-0.5 sm:gap-1">
                   <i data-lucide="plus" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Add
                 </button>
               `}
@@ -673,8 +673,8 @@
       aiOrderStep = 'idle';
 
       document.getElementById('agent-title').textContent = "Human Support Agent (Sarah)";
-      document.getElementById('agent-status').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Human Agent Active`;
-      document.getElementById('agent-icon-bg').className = "w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-white";
+      document.getElementById('agent-status').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Human Active`;
+      document.getElementById('agent-icon-bg').className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-500 flex items-center justify-center text-white shrink-0";
 
       appendAiMessage("👋 Hello! I am Sarah from human support. I have taken over this session. How can I personally help you today?");
     }
